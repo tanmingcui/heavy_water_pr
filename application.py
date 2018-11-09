@@ -3,7 +3,7 @@ from flask import Flask
 
 # print a nice greeting.
 def say_hello(username = "World"):
-    return '<p>Hello %s!</p>\n' % username
+    return '<p>Hi %s!</p>\n' % username
 
 
 # some bits of text for the page.
