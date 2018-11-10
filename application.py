@@ -1,9 +1,10 @@
-from flask import Flask, request, flash, redirect, url_for
+from flask import Flask, request, flash, redirect
 from werkzeug.utils import secure_filename
 
 
 # EB looks for an 'application' callable by default.
 application = Flask(__name__)
+
 
 ALLOWED_EXTENSIONS = set(['csv'])
 
@@ -27,23 +28,24 @@ def upload_file():
         if up_file.filename == '':
             flash('No selected file')
             return redirect(request.url)
-        if file and allowed_file(file.filename):
-            filename = secure_filename(file.filename)
-            return redirect(url_for('uploaded_file',
-                                    filename=filename))
-        return '''
-            <!doctype html>
-            <title>Upload new File</title>
-            <h1>Upload new File</h1>
-            <form method=post enctype=multipart/form-data>
-              <input type=file name=file>
-              <input type=submit value=Upload>
-            </form>
-            '''
+        if up_file and allowed_file(up_file.filename):
+            filename = secure_filename(up_file.filename)
+            return filename
+    return '''
+        <!doctype html>
+        <title>Upload a csv file for document classification</title>
+        <h1>Upload csv File only</h1>
+        <form method=post enctype=multipart/form-data>
+          <input type=file name=file>
+          <input type=submit value=Upload>
+        </form>
+        '''
 
 
 # run the app.
 if __name__ == "__main__":
     # Setting debug to True enables debug output. This line should be
     # removed before deploying a production app.
+    application.secret_key = 'super secret key'
+    application.config['SESSION_TYPE'] = 'filesystem'
     application.run()
