@@ -39,7 +39,7 @@ def upload_file():
                     json_data.append(data)
             json_data = json.dumps(json_data)
 
-            return json_data
+            return 'successfully uploaded'
     return '''
         <!doctype html>
         <title>Upload a csv file for document classification</title>
