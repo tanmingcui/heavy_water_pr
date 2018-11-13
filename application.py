@@ -1,12 +1,12 @@
+import csv
+import io
+import json
 from flask import Flask, request, flash, redirect
-from werkzeug.utils import secure_filename
+from Settings import ALLOWED_EXTENSIONS
 
 
 # EB looks for an 'application' callable by default.
 application = Flask(__name__)
-
-
-ALLOWED_EXTENSIONS = set(['csv'])
 
 
 def allowed_file(filename):
@@ -19,8 +19,7 @@ def upload_file():
     if request.method == 'POST':
         # check if the post request has the file part
         if 'file' not in request.files:
-            flash('No file part')
-            return redirect(request.url)
+            return 'Please upload a csv file'
 
         up_file = request.files['file']
         # if user does not select file, browser also
@@ -29,8 +28,18 @@ def upload_file():
             flash('No selected file')
             return redirect(request.url)
         if up_file and allowed_file(up_file.filename):
-            filename = secure_filename(up_file.filename)
-            return filename
+            stream = io.StringIO(request.files['file'].read().decode("UTF8"), newline=None)
+            csv_input = csv.reader(stream)
+            json_data = list()
+            for row in csv_input:
+                if 0 < len(row[0].split(' ')) <= 5 and 8 < len(row[1].split(' ')):
+                    data = dict()
+                    data['type'] = row[0]
+                    data['content'] = row[1]
+                    json_data.append(data)
+            json_data = json.dumps(json_data)
+
+            return json_data
     return '''
         <!doctype html>
         <title>Upload a csv file for document classification</title>
