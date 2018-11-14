@@ -39,8 +39,7 @@ def upload_file():
                     data['content'] = row[1]
                     json_data.append(data)
             json_data = json.dumps(json_data)
-            res = requests.post('http://68.183.58.223/predict', json=json_data)
-            print res
+            requests.post('http://68.183.58.223/predict', json=json_data)
             return 'successfully uploaded'
     return '''
         <!doctype html>
