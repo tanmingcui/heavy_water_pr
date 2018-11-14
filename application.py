@@ -1,6 +1,7 @@
 import csv
 import io
 import json
+import requests
 from flask import Flask, request, flash, redirect
 from Settings import ALLOWED_EXTENSIONS
 
@@ -38,6 +39,9 @@ def upload_file():
                     data['content'] = row[1]
                     json_data.append(data)
             json_data = json.dumps(json_data)
+            requests.post('http://68.183.58.223/predict', json=json_data)
+            response = requests.get('http://68.183.58.223')
+            print response
 
             return 'successfully uploaded'
     return '''
