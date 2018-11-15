@@ -43,7 +43,7 @@ def upload_file():
             return 'successfully uploaded'
     return '''
         <!doctype html>
-        <title>Upload a csv file for document classification</title>
+        <title>Hello</title>
         <h1>Upload csv File only</h1>
         <form method=post enctype=multipart/form-data>
           <input type=file name=file>
